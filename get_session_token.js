@@ -15,3 +15,5 @@ gs.getSessionToken();
 
 // In App Scope:
 gs.getSession().getSessionToken();
+
+//TBD: Stort the Session Token in a global variable
