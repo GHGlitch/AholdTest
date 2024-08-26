@@ -17,3 +17,4 @@ gs.getSessionToken();
 gs.getSession().getSessionToken();
 
 //TBD: Stort the Session Token in a global variable
+const sessionToken = gs.getSession().getSessionToken();
