@@ -27,9 +27,9 @@ jobs:
           mvn clean
           mvn -B package --file pom.xml
 
-deploy:
+  deploy:
     name: Deploy
-    needs: Build and Deploy website coding verification
+    needs: build-deploy
     runs-on: ubuntu-latest
     steps:     
       - name: ServiceNow Change
