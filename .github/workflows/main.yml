@@ -48,3 +48,78 @@ jobs:
           # Display Name of the Job
           job-name: 'ServiceNow DevOps Change'
           change-request: '{"setCloseCode":"true","autoCloseChange":true,"attributes":{"short_description":"Automated Software Deployment","description":"Automated Software Deployment.","assignment_group":"27af301c0f649640bcf30eece1050eb0","implementation_plan":"Software update is tested and results can be found in Test Summaries Tab; When the change is approved the implementation happens automated by the CICD pipeline within the change planned start and end time window.","backout_plan":"When software fails in production, the previous software release will be re-deployed.","test_plan":"Testing if the software was successfully deployed","chg_model":"${{ secrets.SN_DEVOPS_CHANGE_MODEL }}","u_region":"${{ secrets.SN_DEVOPS_CHANGE_REGION }}","business_service":"${{ secrets.SN_DEVOPS_CHANGE_SERVICE }}","service_offering":"${{ secrets.SN_DEVOPS_CHANGE_OFFERING }}","cmdb_ci":"${{ secrets.SN_DEVOPS_CHANGE_CI }}","assigned_to":"7674847387b02954bcfb0ede8bbb35cb"}}'
+
+  basic-ubuntu-20:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cypress tests
+        # normally you would write
+        # uses: cypress-io/github-action@v6
+        uses: ./
+        # the parameters below are only necessary
+        # because we are running these examples in a monorepo
+        with:
+          working-directory: examples/basic
+          # just for full picture after installing Cypress
+          # print information about detected browsers, etc
+          # see https://on.cypress.io/command-line#cypress-info
+          build: npx cypress info
+
+  basic-ubuntu-22:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cypress tests
+        uses: ./
+        with:
+          working-directory: examples/basic
+          build: npx cypress info
+
+  basic-on-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cypress tests
+        uses: ./
+        with:
+          working-directory: examples/basic
+          build: npx cypress info
+
+  basic-on-mac:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cypress tests
+        uses: ./
+        with:
+          working-directory: examples/basic
+          build: npx cypress info
+
+  # skips the binary installation
+  # shows that the job should not fail
+  # https://github.com/cypress-io/github-action/issues/327
+  basic-without-binary-install:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cypress tests
+        uses: ./
+        with:
+          working-directory: examples/basic
+          # since we do not install Cypress
+          # we should not attempt to run tests
+          runTests: false
+        env:
+          # skip the binary install
+          CYPRESS_INSTALL_BINARY: 0
